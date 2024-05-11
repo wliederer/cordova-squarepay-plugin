@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="cordova-plugin-squarepay" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+  <name>SquarePayPlugin</name>
+  <js-module name="SquarePayPlugin" src="www/SquarePayPlugin.js">
+    <clobbers target="cordova.plugins.SquarePayPlugin" />
+  </js-module>
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="SquarePayPlugin">
+        <param name="ios-package" value="SquarePayPlugin" />
+      </feature>
+    </config-file>
+    <source-file src="src/ios/SquareView.swift" />
+    <source-file src="src/ios/SquarePayPlugin.swift" />
+    <source-file src="src/ios/Constants.swift" />
+    <source-file src="src/ios/SquarePayViewController.swift" />
+    <source-file src="src/ios/AppDelegate+SquarePayPlugin.h" />
+    <source-file src="src/ios/AppDelegate+SquarePayPlugin.m" />
+    <source-file src="src/ios/SquarePayPlugin-Bridging-Header.h" />
+    <dependency id="cordova-plugin-add-swift-support" version="2.0.2"/>
+    <podspec>
+      <config>
+        <source url="https://github.com/CocoaPods/Specs.git"/>
+        <swift-version>5.0</swift-version> <!-- Add Swift version -->
+      </config>
+    </podspec>
+    <pods use-frameworks="true">
+      <pod name="SquareInAppPaymentsSDK" spec="1.6.3" /> <!-- Add SquareInAppPaymentsSDK -->
+      <pod name="SquareBuyerVerificationSDK" spec="1.6.3" />
+      <pod name="PromiseKit" spec="8.1.1" />
+    </pods>
+  </platform>
+</plugin>

@@ -1,0 +1,1 @@
+#import "AppDelegate+SquarePayPlugin.h"
