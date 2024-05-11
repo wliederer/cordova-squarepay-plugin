@@ -17,17 +17,19 @@
     <source-file src="src/ios/AppDelegate+SquarePayPlugin.h" />
     <source-file src="src/ios/AppDelegate+SquarePayPlugin.m" />
     <source-file src="src/ios/SquarePayPlugin-Bridging-Header.h" />
-    <dependency id="cordova-plugin-add-swift-support" version="2.0.2"/>
+    <hook type="after_plugin_install" src="scripts/ios/add_build_phase.js" />
+    <!-- <hook type="after_plugin_install" src="scripts/ios/after_plugin_add.js" /> -->
+    <!-- <dependency id="cordova-plugin-add-swift-support" version="2.0.2"/> -->
     <podspec>
       <config>
         <source url="https://github.com/CocoaPods/Specs.git"/>
         <swift-version>5.0</swift-version> <!-- Add Swift version -->
       </config>
+      <pods use-frameworks="true">
+        <pod name="SquareInAppPaymentsSDK" spec="~> 1.6.3" /> <!-- Add SquareInAppPaymentsSDK -->
+        <pod name="SquareBuyerVerificationSDK" spec="~> 1.6.3" />
+        <pod name="PromiseKit" spec="~> 8.1.1" />
+      </pods>
     </podspec>
-    <pods use-frameworks="true">
-      <pod name="SquareInAppPaymentsSDK" spec="1.6.3" /> <!-- Add SquareInAppPaymentsSDK -->
-      <pod name="SquareBuyerVerificationSDK" spec="1.6.3" />
-      <pod name="PromiseKit" spec="8.1.1" />
-    </pods>
   </platform>
 </plugin>
