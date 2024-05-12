@@ -13,6 +13,7 @@ enum Result<T> {
 
 class SquarePayViewController: UIViewController {
     var applePayAuthorizationResolver: Resolver<String>?
+    var isResolverFulfilled = false
 
     override func loadView() {
         let squareView = SquareView()
@@ -42,6 +43,7 @@ enum SquarePayError: Error {
 
 extension SquarePayViewController: PKPaymentAuthorizationViewControllerDelegate {
     func requestApplePayAuthorization(options: NSDictionary) -> Promise<String> {
+        isResolverFulfilled = false
         return Promise<String> { [weak self] resolver in 
             guard let strongSelf = self else {
                 resolver.reject(SquarePayError.authorizationFailed)
@@ -51,18 +53,21 @@ extension SquarePayViewController: PKPaymentAuthorizationViewControllerDelegate 
        
             guard SQIPInAppPaymentsSDK.canUseApplePay else {
                 strongSelf.applePayAuthorizationResolver?.reject(SquarePayError.authorizationFailed)
+                strongSelf.isResolverFulfilled = true
                 return
             }
             guard let totalDict = options["_total"] as? NSDictionary,
             let amountString = totalDict["amount"] as? String,
             let label = totalDict["label"] as? String else {
                 strongSelf.applePayAuthorizationResolver?.reject(SquarePayError.customError(message:["Invalid walletPaymentRequest()"]))
+                strongSelf.isResolverFulfilled = true
                 return
             }
             let decimalNumber = NSDecimalNumber(string: amountString) 
                 
             guard appleMerchantIdSet else {
                 strongSelf.applePayAuthorizationResolver?.reject(SquarePayError.customError(message:["apple merchantId not set"]))
+                strongSelf.isResolverFulfilled = true
                 return
             }
 
@@ -96,16 +101,23 @@ extension SquarePayViewController: PKPaymentAuthorizationViewControllerDelegate 
                 let errors = [error].compactMap { $0 }
                 print(errors)
                 strongSelf.applePayAuthorizationResolver?.reject(SquarePayError.customError(message:[errors]))
+                strongSelf.isResolverFulfilled = true
                 completion(PKPaymentAuthorizationResult(status: .failure, errors: errors))
                 return
             }
            
             strongSelf.applePayAuthorizationResolver?.fulfill(cardDetails.nonce)
+            strongSelf.isResolverFulfilled = true
             completion(PKPaymentAuthorizationResult(status: .success, errors: nil))    
         }
     }
     func paymentAuthorizationViewControllerDidFinish(_ controller: PKPaymentAuthorizationViewController) {
         controller.dismiss(animated: true) {
+            // Check if the resolver has been fulfilled
+        if !self.isResolverFulfilled {
+                self.applePayAuthorizationResolver?.fulfill("Cancel")
+            }
+        
         }
         dismiss(animated: true, completion: nil)
     }
