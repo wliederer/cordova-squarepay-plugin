@@ -66,18 +66,19 @@ import PromiseKit
     )
 
     DispatchQueue.main.async {
-            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-                return
-            }
-            guard let window = appDelegate.window else {
-                return
-            }
-            
+             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+                 return
+             }
+             guard let window = appDelegate.window else {
+                 return
+             }
     let squarePayViewController = SquarePayViewController()
-    window.rootViewController?.addChildViewController(squarePayViewController)
-    // Extract arguments from command
+    let nc = SquareNavigationController(rootViewController:squarePayViewController)
+    nc.modalPresentationStyle = .custom
+    nc.transitioningDelegate = squarePayViewController.self
+    window.rootViewController?.present(nc,animated:true,completion:nil)
+
     let options = command.arguments[0] as! NSDictionary
-   
     // Call requestApplePayAuthorization
     firstly {
       squarePayViewController.requestApplePayAuthorization(options: options)
@@ -85,6 +86,7 @@ import PromiseKit
         let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: cardDetails)
         self.commandDelegate?.send(pluginResult, callbackId: command.callbackId)
     }.catch { (error) in
+    print(error)
         let pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "Apple Pay authorization failed")
         self.commandDelegate?.send(pluginResult, callbackId: command.callbackId)
     }

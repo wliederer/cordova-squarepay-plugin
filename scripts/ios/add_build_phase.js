@@ -71,6 +71,13 @@ module.exports = function(context) {
 
     fs.writeFileSync(projectPath, xcodeProj.writeSync());
     console.log('Added Script build phase --------------------------------');
+
+    var bridgingHeaderPath = path.join(context.opts.projectRoot, 'platforms', 'ios', projectName, 'Bridging-Header.h');
+    console.log("------------",bridgingHeaderPath)
+    var importStatement = '#import "AppDelegate.h"\n';
+
+    fs.appendFileSync(bridgingHeaderPath, importStatement);
+    console.log("header appended")
 };
 
 // Path to the build phase script

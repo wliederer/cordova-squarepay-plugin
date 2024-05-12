@@ -7,7 +7,7 @@
   [super application:application didFinishLaunchingWithOptions:launchOptions];
   NSLog(@"[SquarePayPlugin]********Application Did Launch**********");
   //testing
-  [SQIPInAppPaymentsSDK setSquareApplicationID:@"sandbox-replace_me"];
+  [SQIPInAppPaymentsSDK setSquareApplicationID:@"sandbox-REPLACE"];
   return YES;
 }
 

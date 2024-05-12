@@ -13,17 +13,19 @@
     <source-file src="src/ios/SquareView.swift" />
     <source-file src="src/ios/SquarePayPlugin.swift" />
     <source-file src="src/ios/Constants.swift" />
+    <source-file src="src/ios/Color.swift" />
+    <source-file src="src/ios/SquareNavigationController.swift" />
+    <source-file src="src/ios/HalfSheetPresentationControllerHeightProtocol.swift" />
     <source-file src="src/ios/SquarePayViewController.swift" />
     <source-file src="src/ios/AppDelegate+SquarePayPlugin.h" />
     <source-file src="src/ios/AppDelegate+SquarePayPlugin.m" />
-    <source-file src="src/ios/SquarePayPlugin-Bridging-Header.h" />
+    <source-file src="src/ios/extension-UIView.swift" />
     <hook type="after_plugin_install" src="scripts/ios/add_build_phase.js" />
-    <!-- <hook type="after_plugin_install" src="scripts/ios/after_plugin_add.js" /> -->
     <!-- <dependency id="cordova-plugin-add-swift-support" version="2.0.2"/> -->
     <podspec>
       <config>
         <source url="https://github.com/CocoaPods/Specs.git"/>
-        <swift-version>5.0</swift-version> <!-- Add Swift version -->
+        <swift-version>4.0</swift-version> <!-- Add Swift version -->
       </config>
       <pods use-frameworks="true">
         <pod name="SquareInAppPaymentsSDK" spec="~> 1.6.3" /> <!-- Add SquareInAppPaymentsSDK -->
@@ -32,4 +34,5 @@
       </pods>
     </podspec>
   </platform>
+  <preference name="deployment-target" value="12.0" />
 </plugin>
